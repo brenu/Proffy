@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import logoImg from "../../assets/images/logo.svg";
@@ -9,8 +9,23 @@ import giveClassesIcon from "../../assets/images/icons/give-classes.svg";
 import purpleHeartIcon from "../../assets/images/icons/purple-heart.svg";
 
 import "./styles.css";
+import api from "../../services/api";
 
 function Landing() {
+  const [totalConnections, setTotalConnections] = useState(0);
+
+  useEffect(() => {
+    async function handleInit() {
+      const response = await api.get("/connections");
+
+      if (response.data) {
+        setTotalConnections(response.data.total);
+      }
+    }
+
+    handleInit();
+  }, []);
+
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
@@ -38,7 +53,10 @@ function Landing() {
         </div>
 
         <span className="total-connections">
-          Total de 200 conexões já realizadas{" "}
+          Total de {totalConnections}
+          {totalConnections !== 1
+            ? " conexões já realizadas"
+            : " conexão já realizada"}
           <img src={purpleHeartIcon} alt="Coração roxo" />
         </span>
       </div>

@@ -3,40 +3,54 @@ import React from "react";
 import "./styles.css";
 
 import whatsappIcon from "../../assets/images/icons/whatsapp.svg";
+import api from "../../services/api";
 
-interface TeacherItemProps {}
+export interface Class {
+  id: number;
+  avatar: string;
+  bio: string;
+  cost: number;
+  name: string;
+  subject: string;
+  user_id: number;
+  whatsapp: string;
+}
+
+interface TeacherItemProps {
+  class: Class;
+}
 
 const TeacherItem: React.FC<TeacherItemProps> = (props) => {
+  async function createNewConnection() {
+    const response = await api.post("/connections", {
+      user_id: props.class.user_id,
+    });
+  }
+
   return (
     <article className="teacher-item">
       <header>
-        <img
-          src="https://avatars1.githubusercontent.com/u/31571238?s=460&u=297e8e8f460b352280cf957ea67026f25255a5f0&v=4"
-          alt="Breno Vitório"
-        />
+        <img src={props.class.avatar} alt={props.class.name} />
         <div>
-          <strong>Breno Vitório</strong>
-          <span>Biologia</span>
+          <strong>{props.class.name}</strong>
+          <span>{props.class.subject}</span>
         </div>
       </header>
 
-      <p>
-        Entusiasta das melhores tecnologias de biologia avançada.
-        <br />
-        <br />
-        Apaixonado por cultivar bactérias em laboratório e por mudar
-        negativamente a vida das pessoas através de experiências. Mais de
-        200.000 pessoas já passaram por uma das minhas infecções.
-      </p>
+      <p>{props.class.bio}</p>
 
       <footer>
         <p>
-          Preço/hora<strong>R$ 90,00</strong>
+          Preço/hora<strong>R$ {props.class.cost}</strong>
         </p>
-        <button type="button">
+        <a
+          target="_blank"
+          onClick={createNewConnection}
+          href={`https://wa.me/${props.class.whatsapp}`}
+        >
           <img src={whatsappIcon} alt="Whatsapp" />
           Entrar em contato
-        </button>
+        </a>
       </footer>
     </article>
   );
