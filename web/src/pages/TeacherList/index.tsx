@@ -33,7 +33,10 @@ function TeacherList() {
         console.log(error.response);
       }
     }
-    searchClasses();
+
+    if (subject && week_day && time) {
+      searchClasses();
+    }
   }, [subject, week_day, time]);
 
   return (
