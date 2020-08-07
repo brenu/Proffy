@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import { ScrollView, BorderlessButton } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
+import { Picker } from "@react-native-community/picker";
 import AsyncStorage from "@react-native-community/async-storage";
 
 import PageHeader from "../../components/PageHeader";
@@ -17,8 +18,8 @@ function TeacherList() {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
-  const [subject, setSubject] = useState("");
-  const [week_day, setWeekDay] = useState("");
+  const [subject, setSubject] = useState("Artes");
+  const [week_day, setWeekDay] = useState("0");
   const [time, setTime] = useState("");
 
   async function handleFavorites() {
@@ -54,7 +55,8 @@ function TeacherList() {
       }
     }
 
-    if (subject && week_day && time) {
+    console.log(subject, week_day, time);
+    if (time) {
       searchClasses();
     }
   }, [subject, week_day, time]);
@@ -81,23 +83,51 @@ function TeacherList() {
         {isFiltersVisible && (
           <View style={styles.searchForm}>
             <Text style={styles.label}>Matéria</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Qual a matéria?"
-              placeholderTextColor="#c1bccc"
-              value={subject}
-              onChangeText={setSubject}
-            />
+            <View style={styles.input}>
+              <Picker
+                selectedValue={subject}
+                onValueChange={(itemValue: any, itemIndex: any) =>
+                  setSubject(itemValue)
+                }
+              >
+                <Picker.Item label="Artes" value="Artes" />
+                <Picker.Item label="Biologia" value="Biologia" />
+                <Picker.Item label="Ciências" value="Ciências" />
+                <Picker.Item label="Ed.Física" value="Ed.Física" />
+                <Picker.Item label="Física" value="Física" />
+                <Picker.Item label="Geografia" value="Geografia" />
+                <Picker.Item label="História" value="História" />
+                <Picker.Item label="Matemática" value="Matemática" />
+                <Picker.Item label="Português" value="Português" />
+                <Picker.Item label="Química" value="Química" />
+              </Picker>
+            </View>
+
             <View style={styles.inputGroup}>
               <View style={styles.inputBlock}>
                 <Text style={styles.label}>Dia da Semana</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Qual o dia?"
-                  placeholderTextColor="#c1bccc"
-                  value={week_day}
-                  onChangeText={setWeekDay}
-                />
+                <View style={[styles.input, { paddingHorizontal: 2 }]}>
+                  <Picker
+                    style={{
+                      height: 45,
+                      backgroundColor: "#fff",
+                      borderRadius: 8,
+                      justifyContent: "center",
+                    }}
+                    selectedValue={week_day}
+                    onValueChange={(itemValue: any, itemIndex: any) =>
+                      setWeekDay(itemValue)
+                    }
+                  >
+                    <Picker.Item label="Domingo" value="0" />
+                    <Picker.Item label="Segunda" value="1" />
+                    <Picker.Item label="Terça" value="2" />
+                    <Picker.Item label="Quarta" value="3" />
+                    <Picker.Item label="Quinta" value="4" />
+                    <Picker.Item label="Sexta" value="5" />
+                    <Picker.Item label="Sábado" value="6" />
+                  </Picker>
+                </View>
               </View>
 
               <View style={styles.inputBlock}>
